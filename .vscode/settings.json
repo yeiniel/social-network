@@ -1,3 +1,4 @@
 {
-    "jest.rootPath": "."
+    "jest.rootPath": ".",
+    "eslint.experimental.useFlatConfig": true
 }
