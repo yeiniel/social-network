@@ -1,0 +1,12 @@
+{
+  "name": "@yeiniel/social-network",
+  "version": "1.0.0",
+  "description": "Attempt at the Social Network Kata",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yeiniel Suarez Sosa <1140833+yeiniel@users.noreply.github.com>",
+  "license": "UNLICENSED",
+  "private": true
+}
