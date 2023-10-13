@@ -4,9 +4,20 @@
   "description": "Attempt at the Social Network Kata",
   "type": "module",
   "scripts": {
+    "build": "tsc --build tsconfig.dist.json",
+    "start": "node ./dist/index.js",
+    "start:dev": "concurrently \"npm run build -- --watch\" \"nodemon -w dist -w .env -x node --env-file=.env ./dist/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Yeiniel Suarez Sosa <1140833+yeiniel@users.noreply.github.com>",
   "license": "UNLICENSED",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "@tsconfig/strictest": "^2.0.2",
+    "@types/node": "^20.8.5",
+    "concurrently": "^8.2.1",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.2.2"
+  }
 }
