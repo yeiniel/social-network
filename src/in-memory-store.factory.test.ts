@@ -21,7 +21,7 @@ describe(inMemoryStoreFactory.name, () => {
             store = inMemoryStoreFactory(map);
         });
 
-        it("should store message on the array for the author identifier", async () => {
+        it("should store message on existing timeline for the author", async () => {
             const author = randomUserFactory();
             const message = randomMessageFactory();
             map.set(author.id, []);
