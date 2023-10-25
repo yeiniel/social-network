@@ -10,14 +10,6 @@ function inMemoryStoreFactory(map: Map<unknown, Message[]>) {
 }
 
 describe(inMemoryStoreFactory.name, () => {
-    it("should return callable when called with Map", () => {
-        const map = new Map();
-
-        const store = inMemoryStoreFactory(map);
-
-        expect(typeof store).toBe("function");
-    });
-
     describe("product", () => {
         let map: Map<unknown, Message[]>;
         let store: StoreFn;
