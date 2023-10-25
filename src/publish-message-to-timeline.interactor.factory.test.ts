@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { User } from "./user.js";
 import { Message } from "./message.js";
 import { StoreFn } from "./store-fn.js";
+import { randomUserFactory } from "./random-user.factory.js";
+import { randomMessageFactory } from "./random-message.factory.js";
 
 type PublishMessageToTimelineInteractor = (author: User, message: Message) => Promise<unknown>;
 
@@ -22,8 +24,8 @@ describe(publishMessageToTimelineInteractorFactory.name, () => {
         });
 
         it("should return the result of calling store(author, message)", async () => {
-            const author = { id: 'Alice' };
-            const message = 'Hello World!';
+            const author = randomUserFactory();
+            const message = randomMessageFactory();
 
             const result = await interactor(author, message);
 

@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it } from "@jest/globals";
 import { StoreFn } from "./store-fn.js";
 import { User } from "./user.js";
 import { Message } from "./message.js";
+import { randomUserFactory } from "./random-user.factory.js";
+import { randomMessageFactory } from "./random-message.factory.js";
 
 function inMemoryStoreFactory(map: Map<User['id'], Message[]>) {
     return async function(author: User, message: Message) {
@@ -20,8 +22,8 @@ describe(inMemoryStoreFactory.name, () => {
         });
 
         it("should store message on the array for the author identifier", async () => {
-            const author = { id: 'Alice' };
-            const message = 'Hello World!';
+            const author = randomUserFactory();
+            const message = randomMessageFactory();
             map.set(author.id, []);
 
             await store(author, message);
