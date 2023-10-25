@@ -3,7 +3,9 @@ import { afterEach, describe, expect, it, jest } from "@jest/globals";
 /** Store Message into User Timeline */
 type StoreFn = (...args: unknown[]) => Promise<unknown>;
 
-function publishMessageToTimelineInteractorFactory() {}
+function publishMessageToTimelineInteractorFactory(_store: StoreFn) {
+    return function publishMessageToTimelineInteractor() {}
+}
 
 describe(publishMessageToTimelineInteractorFactory.name, () => {
     it("should be defined", () => {
