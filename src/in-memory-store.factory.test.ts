@@ -1,8 +1,12 @@
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import { StoreFn } from "./store-fn.js";
+import { User } from "./user.js";
+import { Message } from "./message.js";
 
-function inMemoryStoreFactory(_map: Map<unknown, unknown>) {
-    return function() {};
+function inMemoryStoreFactory(map: Map<unknown, Message[]>) {
+    return async function(author: User, message: Message) {
+        map.get((author as any).id)!.push(message);
+    };
 }
 
 describe(inMemoryStoreFactory.name, () => {
@@ -15,7 +19,7 @@ describe(inMemoryStoreFactory.name, () => {
     });
 
     describe("product", () => {
-        let map: Map<unknown, unknown>;
+        let map: Map<unknown, Message[]>;
         let store: StoreFn;
 
         beforeEach(() => {
