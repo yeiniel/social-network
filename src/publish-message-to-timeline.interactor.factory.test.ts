@@ -8,10 +8,6 @@ function publishMessageToTimelineInteractorFactory(_store: StoreFn) {
 }
 
 describe(publishMessageToTimelineInteractorFactory.name, () => {
-    it("should be defined", () => {
-        expect(publishMessageToTimelineInteractorFactory).toBeDefined();
-    });
-
     it("should return callable when called with store", () => {
         const store = jest.fn<StoreFn>();
 
