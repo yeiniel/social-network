@@ -25,23 +25,20 @@ describe(inMemoryStoreFactory.name, () => {
             store = inMemoryStoreFactory(map);
         });
 
-        it("should store message on existing timeline for the author", async () => {
+        async function testStoreShouldStoreMessageOnArrayForAuthorIdentifier(createArray: boolean) {
             const author = randomUserFactory();
             const message = randomMessageFactory();
-            map.set(author.id, []);
-
-            await store(author, message);
-
-            expect(map.get(author.id)).toContain(message);
-        });
-
-        it("should store message on created timeline for the author", async () => {
-            const author = randomUserFactory();
-            const message = randomMessageFactory();
+            if (createArray) {
+                map.set(author.id, []);
+            }
             
             await store(author, message);
 
             expect(map.get(author.id)).toContain(message);
-        });
+        }
+
+        it("should store message on existing timeline for the author", testStoreShouldStoreMessageOnArrayForAuthorIdentifier.bind(undefined, true));
+
+        it("should store message on created timeline for the author", testStoreShouldStoreMessageOnArrayForAuthorIdentifier.bind(undefined, false));
     });
 });
