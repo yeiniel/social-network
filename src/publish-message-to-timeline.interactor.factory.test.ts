@@ -6,8 +6,10 @@ type Message = unknown;
 type StoreFn = (author: User, message: Message) => Promise<unknown>;
 type PublishMessageToTimelineInteractor = (author: User, message: Message) => Promise<unknown>;
 
-function publishMessageToTimelineInteractorFactory(_store: StoreFn) {
-    return function publishMessageToTimelineInteractor() {}
+function publishMessageToTimelineInteractorFactory(store: StoreFn) {
+    return function publishMessageToTimelineInteractor(author: User, message: Message) {
+        return store(author, message);
+    }
 }
 
 describe(publishMessageToTimelineInteractorFactory.name, () => {
