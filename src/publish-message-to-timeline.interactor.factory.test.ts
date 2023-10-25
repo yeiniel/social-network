@@ -1,9 +1,8 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
+import { User } from "./user.js";
+import { Message } from "./message.js";
+import { StoreFn } from "./store-fn.js";
 
-type User = unknown;
-type Message = unknown;
-/** Store Message into User Timeline */
-type StoreFn = (author: User, message: Message) => Promise<unknown>;
 type PublishMessageToTimelineInteractor = (author: User, message: Message) => Promise<unknown>;
 
 function publishMessageToTimelineInteractorFactory(store: StoreFn) {
