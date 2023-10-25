@@ -13,14 +13,6 @@ function publishMessageToTimelineInteractorFactory(store: StoreFn) {
 }
 
 describe(publishMessageToTimelineInteractorFactory.name, () => {
-    it("should return callable when called with store", () => {
-        const store = jest.fn<StoreFn>();
-
-        const interactor = publishMessageToTimelineInteractorFactory(store);
-
-        expect(typeof interactor).toBe("function");
-    });
-
     describe("product", () => {
         let store: jest.Mock<StoreFn>;
         let interactor: PublishMessageToTimelineInteractor;
