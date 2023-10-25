@@ -1,6 +1,8 @@
 import { describe, expect, it } from "@jest/globals";
 
-function inMemoryStoreFactory() {}
+function inMemoryStoreFactory(_map: Map<unknown, unknown>) {
+    return function() {};
+}
 
 describe(inMemoryStoreFactory.name, () => {
     it("should be defined", () => {
