@@ -30,5 +30,14 @@ describe(inMemoryStoreFactory.name, () => {
 
             expect(map.get(author.id)).toContain(message);
         });
+
+        it("should store message on created timeline for the author", async () => {
+            const author = randomUserFactory();
+            const message = randomMessageFactory();
+            
+            await store(author, message);
+
+            expect(map.get(author.id)).toContain(message);
+        });
     });
 });
