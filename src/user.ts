@@ -1,1 +1,4 @@
-export type User = unknown;
+export type User = {
+    /** Identity */
+    id: unknown;
+};

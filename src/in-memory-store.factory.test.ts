@@ -3,9 +3,9 @@ import { StoreFn } from "./store-fn.js";
 import { User } from "./user.js";
 import { Message } from "./message.js";
 
-function inMemoryStoreFactory(map: Map<unknown, Message[]>) {
+function inMemoryStoreFactory(map: Map<User['id'], Message[]>) {
     return async function(author: User, message: Message) {
-        map.get((author as any).id)!.push(message);
+        map.get(author.id)!.push(message);
     };
 }
 

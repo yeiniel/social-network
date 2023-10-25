@@ -22,7 +22,7 @@ describe(publishMessageToTimelineInteractorFactory.name, () => {
         });
 
         it("should return the result of calling store(author, message)", async () => {
-            const author = 'Alice';
+            const author = { id: 'Alice' };
             const message = 'Hello World!';
 
             const result = await interactor(author, message);
