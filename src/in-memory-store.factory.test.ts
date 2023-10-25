@@ -7,6 +7,10 @@ import { randomMessageFactory } from "./random-message.factory.js";
 
 function inMemoryStoreFactory(map: Map<User['id'], Message[]>) {
     return async function(author: User, message: Message) {
+        if (!map.has(author.id)) {
+            map.set(author.id, []);
+        }
+
         map.get(author.id)!.push(message);
     };
 }
