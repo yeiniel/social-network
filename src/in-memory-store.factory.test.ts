@@ -5,10 +5,6 @@ function inMemoryStoreFactory(_map: Map<unknown, unknown>) {
 }
 
 describe(inMemoryStoreFactory.name, () => {
-    it("should be defined", () => {
-        expect(inMemoryStoreFactory).toBeDefined();
-    });
-
     it("should return callable when called with Map", () => {
         const map = new Map();
 
