@@ -7,10 +7,6 @@ function applicationFactory(expressFactory = express) {
 }
 
 describe(applicationFactory.name, () => {
-    it("should be defined", () => {
-        expect(applicationFactory).toBeDefined();
-    });
-
     it("should return a new instance of the express application", () => {
         jest.mocked(express).mockImplementation(jest.requireActual("express"));
 
