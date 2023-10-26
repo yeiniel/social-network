@@ -4,8 +4,12 @@ jest.mock("express-openid-connect");
 import express, { Application, NextFunction } from "express";
 import { auth } from "express-openid-connect";
 
-function applicationFactory(expressFactory = express) {
-    return expressFactory();
+function applicationFactory(authMiddlewareFactory = auth, expressFactory = express) {
+    const app = expressFactory();
+
+    app.use(authMiddlewareFactory());
+
+    return app;
 }
 
 describe(applicationFactory.name, () => {
