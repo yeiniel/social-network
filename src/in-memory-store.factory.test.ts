@@ -11,7 +11,7 @@ function inMemoryStoreFactory(map: Map<User['id'], Message[]>) {
             map.set(author.id, []);
         }
 
-        map.get(author.id)!.push(message);
+        return map.get(author.id)!.push(message);
     };
 }
 
