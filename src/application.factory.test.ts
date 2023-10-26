@@ -2,7 +2,9 @@ import { describe, expect, it, jest } from "@jest/globals";
 jest.mock("express");
 import express from "express";
 
-function applicationFactory() {}
+function applicationFactory(expressFactory = express) {
+    return expressFactory();
+}
 
 describe(applicationFactory.name, () => {
     it("should be defined", () => {
