@@ -11,10 +11,18 @@ class MessageRequiredError extends Error {
     }
 }
 
-function applicationFactory(authMiddlewareFactory = auth, expressFactory = express) {
+function applicationFactory(authMiddlewareFactory = auth, urlencodedMiddlewareFactory = express.urlencoded, expressFactory = express) {
     const app = expressFactory();
 
     app.use(authMiddlewareFactory());
+    app.use(urlencodedMiddlewareFactory());
+
+    app.route("/compose")
+        .post((req, _res, next) => {
+            if (!Object.keys(req.body).length) {
+                return next(new MessageRequiredError());
+            }
+        });
 
     return app;
 }
@@ -22,6 +30,7 @@ function applicationFactory(authMiddlewareFactory = auth, expressFactory = expre
 describe(applicationFactory.name, () => {
     beforeEach(() => {
         jest.mocked(express).mockImplementation(jest.requireActual("express"));
+        jest.mocked(express.urlencoded).mockImplementation(jest.requireActual<typeof express>("express").urlencoded);
         jest.mocked(auth).mockReturnValue((_req: unknown, _res: unknown, next: NextFunction) => next());
     });
     
