@@ -8,6 +8,7 @@ import { randomMessageFactory } from "./random-message.factory.js";
 import { User } from "./user.js";
 import { randomUserFactory } from "./random-user.factory.js";
 import { PublishMessageToTimelineInteractor } from "./publish-message-to-timeline.interactor.js";
+import { cwd } from "process";
 
 class MessageRequiredError extends Error {
     constructor() {
@@ -49,6 +50,7 @@ function applicationFactory(
     app.use(urlencodedMiddlewareFactory());
 
     app.route("/compose")
+        .get((_req, res) => res.sendFile('./public/index.html', { root: cwd() }))
         .post(publishMessageToTimelineControllerImpl
                 .bind(undefined, publishMessageToTimelineInteractor));
 
