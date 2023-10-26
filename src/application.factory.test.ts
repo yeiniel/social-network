@@ -15,17 +15,21 @@ class MessageRequiredError extends Error {
     }
 }
 
-function applicationFactory(authMiddlewareFactory = auth, urlencodedMiddlewareFactory = express.urlencoded, expressFactory = express) {
+function applicationFactory(publishMessageToTimelineInteractor: PublishMessageToTimelineInteractor, authMiddlewareFactory = auth, urlencodedMiddlewareFactory = express.urlencoded, expressFactory = express) {
     const app = expressFactory();
 
     app.use(authMiddlewareFactory());
     app.use(urlencodedMiddlewareFactory());
 
     app.route("/compose")
-        .post((req, _res, next) => {
+        .post(async (req, res, next) => {
             if (!Object.keys(req.body).length) {
                 return next(new MessageRequiredError());
             }
+
+            res.status(200)
+             .write(JSON.stringify(await publishMessageToTimelineInteractor(req.oidc.user as User, req.body)));
+            res.end();
         });
 
     return app;
