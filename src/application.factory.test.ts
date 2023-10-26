@@ -100,6 +100,15 @@ describe(applicationFactory.name, () => {
                 return req;
             }
 
+            it("should handle get and present html page with form", async () => {
+                const res = await request(applicationFactory(interactor))
+                    .get(endpoint)
+   
+                expect(res.status).toBe(200);
+                expect(res.type).toBe("text/html");
+                expect(res.text).toContain("<form");
+            });
+
             it("should authenticate user", async () => {
                 const message = 'User not authenticated';
                 jest.mocked(auth).mockReturnValue((_req: unknown, _res: unknown, next: NextFunction) => next(new Error(message)));
