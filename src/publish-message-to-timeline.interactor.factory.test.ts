@@ -1,16 +1,9 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { User } from "./user.js";
-import { Message } from "./message.js";
 import { StoreFn } from "./store-fn.js";
 import { randomUserFactory } from "./random-user.factory.js";
 import { randomMessageFactory } from "./random-message.factory.js";
 import { PublishMessageToTimelineInteractor } from "./publish-message-to-timeline.interactor.js";
-
-function publishMessageToTimelineInteractorFactory(store: StoreFn) {
-    return function publishMessageToTimelineInteractor(author: User, message: Message) {
-        return store(author, message);
-    }
-}
+import { publishMessageToTimelineInteractorFactory } from "./publish-message-to-timeline-interactor.factory.js";
 
 describe(publishMessageToTimelineInteractorFactory.name, () => {
     describe("product", () => {

@@ -2,60 +2,13 @@ import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals
 jest.mock("express");
 jest.mock("express-openid-connect");
 import request from "supertest";
-import express, { NextFunction, Request, Response } from "express";
+import express, { NextFunction, Request } from "express";
 import { auth } from "express-openid-connect";
 import { randomMessageFactory } from "./random-message.factory.js";
-import { User } from "./user.js";
 import { randomUserFactory } from "./random-user.factory.js";
 import { PublishMessageToTimelineInteractor } from "./publish-message-to-timeline.interactor.js";
-import { cwd } from "process";
-
-class MessageRequiredError extends Error {
-    constructor() {
-        super("Message is required");
-    }
-}
-
-function userFromOIDCUser(user: Exclude<Request['oidc']['user'], undefined>): User {
-    return {
-        ...user,
-        id: user["sub"]
-    }
-}
-
-async function publishMessageToTimelineController(publishMessageToTimelineInteractor: PublishMessageToTimelineInteractor, req: Request, res: Response, next: NextFunction) {
-    try {
-        if (!Object.keys(req.body).length) {
-            throw new MessageRequiredError();
-        }
-
-        res.status(200);
-        res.write(JSON.stringify(await publishMessageToTimelineInteractor(userFromOIDCUser(req.oidc.user!), req.body)));
-        res.end();
-    } catch (err) {
-        next(err);
-    }
-}
-
-function applicationFactory(
-        publishMessageToTimelineInteractor: PublishMessageToTimelineInteractor, 
-        authMiddlewareFactory = auth, 
-        publishMessageToTimelineControllerImpl: typeof publishMessageToTimelineController = publishMessageToTimelineController, 
-        urlencodedMiddlewareFactory = express.urlencoded, 
-        expressFactory = express
-) {
-    const app = expressFactory();
-
-    app.use(authMiddlewareFactory());
-    app.use(urlencodedMiddlewareFactory());
-
-    app.route("/compose")
-        .get((_req, res) => res.sendFile('./public/index.html', { root: cwd() }))
-        .post(publishMessageToTimelineControllerImpl
-                .bind(undefined, publishMessageToTimelineInteractor));
-
-    return app;
-}
+import { MessageRequiredError } from "./message-required.error.js";
+import { applicationFactory } from "./application.factory.js";
 
 describe(applicationFactory.name, () => {
     function randomOIDCUserFactory(): Request['oidc']['user'] {

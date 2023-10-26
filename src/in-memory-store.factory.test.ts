@@ -1,19 +1,9 @@
 import { beforeEach, describe, expect, it } from "@jest/globals";
 import { StoreFn } from "./store-fn.js";
-import { User } from "./user.js";
 import { Message } from "./message.js";
 import { randomUserFactory } from "./random-user.factory.js";
 import { randomMessageFactory } from "./random-message.factory.js";
-
-function inMemoryStoreFactory(map: Map<User['id'], Message[]>) {
-    return async function(author: User, message: Message) {
-        if (!map.has(author.id)) {
-            map.set(author.id, []);
-        }
-
-        return map.get(author.id)!.push(message);
-    };
-}
+import { inMemoryStoreFactory } from "./in-memory-store.factory.js";
 
 describe(inMemoryStoreFactory.name, () => {
     describe("product", () => {
