@@ -15,6 +15,13 @@ class MessageRequiredError extends Error {
     }
 }
 
+function userFromOIDCUser(user: Exclude<Request['oidc']['user'], undefined>): User {
+    return {
+        ...user,
+        id: user["sub"]
+    }
+}
+
 async function publishMessageToTimelineController(publishMessageToTimelineInteractor: PublishMessageToTimelineInteractor, req: Request, res: Response, next: NextFunction) {
     try {
         if (!Object.keys(req.body).length) {
@@ -22,7 +29,7 @@ async function publishMessageToTimelineController(publishMessageToTimelineIntera
         }
 
         res.status(200);
-        res.write(JSON.stringify(await publishMessageToTimelineInteractor(req.oidc.user as User, req.body)));
+        res.write(JSON.stringify(await publishMessageToTimelineInteractor(userFromOIDCUser(req.oidc.user!), req.body)));
         res.end();
     } catch (err) {
         next(err);
@@ -41,7 +48,6 @@ function applicationFactory(
     app.use(authMiddlewareFactory());
     app.use(urlencodedMiddlewareFactory());
 
-
     app.route("/compose")
         .post(publishMessageToTimelineControllerImpl
                 .bind(undefined, publishMessageToTimelineInteractor));
@@ -50,11 +56,18 @@ function applicationFactory(
 }
 
 describe(applicationFactory.name, () => {
-    let user: User;
+    function randomOIDCUserFactory(): Request['oidc']['user'] {
+        const user = randomUserFactory();
+        user["sub"] = user.id;
+    
+        return user;
+    }
+
+    let user: ReturnType<typeof randomOIDCUserFactory>;
     let interactor: PublishMessageToTimelineInteractor;
 
     beforeEach(() => {
-        user = randomUserFactory();
+        user = randomOIDCUserFactory();
         interactor = jest.fn<PublishMessageToTimelineInteractor>().mockResolvedValue(Math.random());
         jest.mocked(express).mockImplementation(jest.requireActual("express"));
         jest.mocked(express.urlencoded).mockImplementation(jest.requireActual<typeof express>("express").urlencoded);
