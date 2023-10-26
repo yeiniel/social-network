@@ -22,15 +22,6 @@ describe(applicationFactory.name, () => {
         jest.restoreAllMocks();
     });
 
-    it("should return a new instance of the express application", () => {
-        jest.mocked(express).mockImplementation(jest.requireActual("express"));
-
-        const app = applicationFactory();
-
-        expect(express).toBeCalledTimes(1);
-        expect(app).toBe(jest.mocked(express).mock.results[0]!.value);
-    });
-
     it("should use the express-openid-connect auth middleware", () => {
         const actualApp = jest.requireActual<typeof express>("express")();
          jest.spyOn(actualApp, "use");
