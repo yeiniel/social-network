@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals
 jest.mock("express");
 jest.mock("express-openid-connect");
 import request from "supertest";
-import express, { NextFunction, Request } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { auth } from "express-openid-connect";
 import { randomMessageFactory } from "./random-message.factory.js";
 import { User } from "./user.js";
@@ -15,22 +15,36 @@ class MessageRequiredError extends Error {
     }
 }
 
-function applicationFactory(publishMessageToTimelineInteractor: PublishMessageToTimelineInteractor, authMiddlewareFactory = auth, urlencodedMiddlewareFactory = express.urlencoded, expressFactory = express) {
+async function publishMessageToTimelineController(publishMessageToTimelineInteractor: PublishMessageToTimelineInteractor, req: Request, res: Response, next: NextFunction) {
+    try {
+        if (!Object.keys(req.body).length) {
+            throw new MessageRequiredError();
+        }
+
+        res.status(200);
+        res.write(JSON.stringify(await publishMessageToTimelineInteractor(req.oidc.user as User, req.body)));
+        res.end();
+    } catch (err) {
+        next(err);
+    }
+}
+
+function applicationFactory(
+        publishMessageToTimelineInteractor: PublishMessageToTimelineInteractor, 
+        authMiddlewareFactory = auth, 
+        publishMessageToTimelineControllerImpl: typeof publishMessageToTimelineController = publishMessageToTimelineController, 
+        urlencodedMiddlewareFactory = express.urlencoded, 
+        expressFactory = express
+) {
     const app = expressFactory();
 
     app.use(authMiddlewareFactory());
     app.use(urlencodedMiddlewareFactory());
 
-    app.route("/compose")
-        .post(async (req, res, next) => {
-            if (!Object.keys(req.body).length) {
-                return next(new MessageRequiredError());
-            }
 
-            res.status(200)
-             .write(JSON.stringify(await publishMessageToTimelineInteractor(req.oidc.user as User, req.body)));
-            res.end();
-        });
+    app.route("/compose")
+        .post(publishMessageToTimelineControllerImpl
+                .bind(undefined, publishMessageToTimelineInteractor));
 
     return app;
 }
