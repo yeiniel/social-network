@@ -2,8 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals
 jest.mock("express");
 jest.mock("express-openid-connect");
 import request from "supertest";
-import express, { NextFunction } from "express";
+import express, { NextFunction, Request } from "express";
 import { auth } from "express-openid-connect";
+import { randomMessageFactory } from "./random-message.factory.js";
+import { User } from "./user.js";
+import { randomUserFactory } from "./random-user.factory.js";
+import { PublishMessageToTimelineInteractor } from "./publish-message-to-timeline.interactor.js";
 
 class MessageRequiredError extends Error {
     constructor() {
@@ -28,10 +32,21 @@ function applicationFactory(authMiddlewareFactory = auth, urlencodedMiddlewareFa
 }
 
 describe(applicationFactory.name, () => {
+    let user: User;
+    let interactor: PublishMessageToTimelineInteractor;
+
     beforeEach(() => {
+        user = randomUserFactory();
+        interactor = jest.fn<PublishMessageToTimelineInteractor>().mockResolvedValue(Math.random());
         jest.mocked(express).mockImplementation(jest.requireActual("express"));
         jest.mocked(express.urlencoded).mockImplementation(jest.requireActual<typeof express>("express").urlencoded);
-        jest.mocked(auth).mockReturnValue((_req: unknown, _res: unknown, next: NextFunction) => next());
+        jest.mocked(auth).mockReturnValue((req: Request, _res: unknown, next: NextFunction) => {
+            req.oidc = {
+                user
+            } as never;
+
+            next();
+        });
     });
     
     afterEach(() => {
@@ -42,10 +57,16 @@ describe(applicationFactory.name, () => {
         describe("while publishing message to personal timeline", () => {
             const endpoint = "/compose";
 
-            function requestFactory() {
-                return request(applicationFactory())
+            function requestFactory(message: Record<string, unknown> = {}) {
+                let req = request(applicationFactory(interactor))
                     .post(endpoint)
                     .set('Content-Type', 'application/x-www-form-urlencoded');
+
+                for (const key of Object.keys(message)) {
+                    req = req.send(`${key}=${message[key]}`);
+                }
+
+                return req;
             }
 
             it("should authenticate user", async () => {
@@ -63,6 +84,17 @@ describe(applicationFactory.name, () => {
     
                  expect(res.status).toBe(500);
                  expect(res.text).toContain(new MessageRequiredError().message);
+            });
+
+            it("should send result of calling await interactor(req.oidc.user, req.body)", async () => {
+                const message = randomMessageFactory();
+   
+                const res = await requestFactory(message);
+   
+                expect(interactor).toBeCalledWith(user, message);
+                expect(res.text).toEqual(JSON.stringify(
+                    await jest.mocked(interactor).mock.results[0]!.value
+                ));
             });
         });
     });

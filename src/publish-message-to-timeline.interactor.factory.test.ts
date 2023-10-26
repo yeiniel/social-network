@@ -4,8 +4,7 @@ import { Message } from "./message.js";
 import { StoreFn } from "./store-fn.js";
 import { randomUserFactory } from "./random-user.factory.js";
 import { randomMessageFactory } from "./random-message.factory.js";
-
-type PublishMessageToTimelineInteractor = (author: User, message: Message) => Promise<unknown>;
+import { PublishMessageToTimelineInteractor } from "./publish-message-to-timeline.interactor.js";
 
 function publishMessageToTimelineInteractorFactory(store: StoreFn) {
     return function publishMessageToTimelineInteractor(author: User, message: Message) {

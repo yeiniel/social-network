@@ -1,1 +1,3 @@
-export type Message = unknown;
+export type Message = {
+    [key: string]: unknown;
+};
