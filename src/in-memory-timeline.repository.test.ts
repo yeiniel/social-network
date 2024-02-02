@@ -1,6 +1,9 @@
 import { describe, expect, it } from "@jest/globals";
+import { TimelineRepository } from "./timeline.repository.js";
 
-class InMemoryTimelineRepository {}
+class InMemoryTimelineRepository implements TimelineRepository {
+    public async store(): Promise<void> {}
+}
 
 describe(InMemoryTimelineRepository.name, () => {
     it('should be defined', () => {
