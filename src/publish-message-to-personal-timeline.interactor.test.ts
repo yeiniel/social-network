@@ -1,6 +1,8 @@
 import { describe, it, expect } from '@jest/globals';
 
-class PublishMessageToPersonalTimelineInteractor {}
+class PublishMessageToPersonalTimelineInteractor {
+    public execute() {}
+}
 
 describe(PublishMessageToPersonalTimelineInteractor.name, () => {
     it('should be defined', () => {
