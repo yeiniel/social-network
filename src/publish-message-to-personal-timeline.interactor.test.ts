@@ -1,8 +1,7 @@
 import { describe, it, expect, jest } from '@jest/globals';
-
-type User = unknown;
-type Message = unknown;
-type TimelineRepository = { store: (author: User, message: Message) => Promise<unknown>; };
+import { User } from './user.js';
+import { Message } from './message.js';
+import { TimelineRepository } from './timeline.repository.js';
 
 class PublishMessageToPersonalTimelineInteractor {
     constructor(private readonly timelineRepository: TimelineRepository) { }
