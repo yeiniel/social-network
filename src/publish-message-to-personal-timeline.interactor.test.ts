@@ -14,10 +14,6 @@ class PublishMessageToPersonalTimelineInteractor {
 
 describe(PublishMessageToPersonalTimelineInteractor.name, () => {
     describe(PublishMessageToPersonalTimelineInteractor.prototype.execute.name, () => {
-        it('should be of type function', () => {
-            expect(typeof (new PublishMessageToPersonalTimelineInteractor()).execute).toBe('function');
-        });
-
         it('should call timelineRepository.store with author and message', async () => {
             const author: User = 'some-random-author';
             const message: Message = 'some-random-message'; 
