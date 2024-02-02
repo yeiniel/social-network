@@ -4,7 +4,11 @@ import { User } from "./user.js";
 import { Message } from "./message.js";
 
 class InMemoryTimelineRepository implements TimelineRepository {
-    public async store(): Promise<void> {}
+    constructor(private map: Map<User, Message[]>) {}
+
+    public async store(owner: User, message: Message): Promise<void> {
+        this.map.set(owner, [message]);
+    }
 }
 
 describe(InMemoryTimelineRepository.name, () => {
