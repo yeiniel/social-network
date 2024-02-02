@@ -1,11 +1,12 @@
 import { describe, it, expect, jest } from '@jest/globals';
 import { User } from './user.js';
 import { Message } from './message.js';
+import { PublishMessageToPersonalTimelineUseCase } from './publish-message-to-personal-timeline.use-case.js';
 import { TimelineRepository } from './timeline.repository.js';
 import { randomUserFactory } from './testing/random-user.factory.js';
 import { randomMessageFactory } from './testing/random-message.factory.js';
 
-class PublishMessageToPersonalTimelineInteractor {
+class PublishMessageToPersonalTimelineInteractor implements PublishMessageToPersonalTimelineUseCase {
     constructor(private readonly timelineRepository: TimelineRepository) { }
 
     public async execute(author: User, message: Message) {
