@@ -5,10 +5,10 @@ type Message = unknown;
 type TimelineRepository = { store: (author: User, message: Message) => Promise<unknown>; };
 
 class PublishMessageToPersonalTimelineInteractor {
-    constructor(private readonly timelineRepository?: TimelineRepository) { }
+    constructor(private readonly timelineRepository: TimelineRepository) { }
 
     public async execute(author: User, message: Message) {
-        await this.timelineRepository?.store(author, message);
+        await this.timelineRepository.store(author, message);
     }
 }
 
