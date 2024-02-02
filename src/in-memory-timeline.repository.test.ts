@@ -13,10 +13,6 @@ class InMemoryTimelineRepository implements TimelineRepository {
 
 describe(InMemoryTimelineRepository.name, () => {
     describe(InMemoryTimelineRepository.prototype.store.name, () => {
-        it('should be defined', () => {
-            expect(InMemoryTimelineRepository.prototype.store).toBeDefined();
-        });
-
         it('should set map entry with key owner to array of first message', async () => {
             const owner: User = 'some-random-author';
             const message: Message = 'some-random-message'; 
