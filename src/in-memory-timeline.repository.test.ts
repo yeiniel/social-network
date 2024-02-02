@@ -23,6 +23,16 @@ describe(InMemoryTimelineRepository.name, () => {
     let map: ConstructorParameters<typeof InMemoryTimelineRepository>[0];
     let repository: InMemoryTimelineRepository;
 
+    const expectToAddMessageToOwnerArray = async (
+        message: Message
+    ) => {
+        const initial = map.has(owner) ? [...map.get(owner)!] : [];
+
+        await repository.store(owner, message);
+
+        expect(map.get(owner)).toEqual([...initial, message]);
+    };
+
     beforeEach(() => {
         owner = randomUserFactory();
         messageToStore = randomMessageFactory();
@@ -31,19 +41,13 @@ describe(InMemoryTimelineRepository.name, () => {
     });
 
     describe(InMemoryTimelineRepository.prototype.store.name, () => {
-        it('should set map entry with key owner to array of first message', async () => {
-            await repository.store(owner, messageToStore);
-
-            expect(map.get(owner)).toEqual([messageToStore]);
-        });
+        it('should set map entry with key owner to array of first message', () => expectToAddMessageToOwnerArray(messageToStore));
 
         it('should update map entry with key owner and append additional message', async () => {
             const initialMessage = randomMessageFactory();
             map.set(owner, [initialMessage]);
 
-            await repository.store(owner, messageToStore);
-
-            expect(map.get(owner)).toEqual([initialMessage, messageToStore]);
+            await expectToAddMessageToOwnerArray(messageToStore);
         });
     })
 });
