@@ -23,5 +23,17 @@ describe(InMemoryTimelineRepository.name, () => {
 
             expect(map.get(owner)).toEqual([message]);
         });
+
+        it('should update map entry with key owner and append additional message', async () => {
+            const owner: User = 'some-random-author';
+            const initialMessage: Message = 'some-initial-message';
+            const additionalMessage: Message = 'some-additional-message'; 
+            const map = new Map<User, Message[]>([[owner, [initialMessage]]]);
+            const timelineRepository = new InMemoryTimelineRepository(map);
+
+            await timelineRepository.store(owner, additionalMessage);
+
+            expect(map.get(owner)).toEqual([initialMessage, additionalMessage]);
+        });
     })
 });
