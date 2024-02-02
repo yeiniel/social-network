@@ -1,0 +1,25 @@
+{
+  "name": "@yeiniel/social-network",
+  "version": "1.0.0",
+  "description": "Attempt at the Social Network Kata [source](https://kata-log.rocks/social-network-kata)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yeiniel/social-network.git"
+  },
+  "keywords": [
+    "expressjs",
+    "nodejs",
+    "hexagonal-architecture"
+  ],
+  "author": "Yeiniel Suarez Sosa <1140833+yeiniel@users.noreply.github.com>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/yeiniel/social-network/issues"
+  },
+  "homepage": "https://github.com/yeiniel/social-network#readme"
+}
