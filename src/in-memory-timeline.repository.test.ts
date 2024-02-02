@@ -7,7 +7,11 @@ class InMemoryTimelineRepository implements TimelineRepository {
     constructor(private map: Map<User, Message[]>) {}
 
     public async store(owner: User, message: Message): Promise<void> {
-        this.map.set(owner, [message]);
+        if (!this.map.has(owner)) {
+            this.map.set(owner, []);
+        }
+
+        this.map.get(owner)!.push(message);
     }
 }
 
