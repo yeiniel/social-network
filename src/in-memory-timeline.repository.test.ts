@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it } from "@jest/globals";
 import { TimelineRepository } from "./timeline.repository.js";
 import { User } from "./user.js";
 import { Message } from "./message.js";
+import { randomUserFactory } from "./testing/random-user.factory.js";
+import { randomMessageFactory } from "./testing/random-message.factory.js";
 
 class InMemoryTimelineRepository implements TimelineRepository {
     constructor(private map: Map<User, Message[]>) {}
@@ -17,32 +19,31 @@ class InMemoryTimelineRepository implements TimelineRepository {
 
 describe(InMemoryTimelineRepository.name, () => {
     let owner: Parameters<TimelineRepository['store']>[0];
+    let messageToStore: Parameters<TimelineRepository['store']>[1];
     let map: ConstructorParameters<typeof InMemoryTimelineRepository>[0];
     let repository: InMemoryTimelineRepository;
 
     beforeEach(() => {
+        owner = randomUserFactory();
+        messageToStore = randomMessageFactory();
         map = new Map<User, Message[]>();
-        owner = 'some-random-author';
         repository = new InMemoryTimelineRepository(map);
     });
 
     describe(InMemoryTimelineRepository.prototype.store.name, () => {
         it('should set map entry with key owner to array of first message', async () => {
-            const message: Message = 'some-random-message'; 
+            await repository.store(owner, messageToStore);
 
-            await repository.store(owner, message);
-
-            expect(map.get(owner)).toEqual([message]);
+            expect(map.get(owner)).toEqual([messageToStore]);
         });
 
         it('should update map entry with key owner and append additional message', async () => {
-            const initialMessage: Message = 'some-initial-message';
-            const additionalMessage: Message = 'some-additional-message'; 
+            const initialMessage = randomMessageFactory();
             map.set(owner, [initialMessage]);
 
-            await repository.store(owner, additionalMessage);
+            await repository.store(owner, messageToStore);
 
-            expect(map.get(owner)).toEqual([initialMessage, additionalMessage]);
+            expect(map.get(owner)).toEqual([initialMessage, messageToStore]);
         });
     })
 });

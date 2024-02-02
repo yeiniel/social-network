@@ -2,6 +2,8 @@ import { describe, it, expect, jest } from '@jest/globals';
 import { User } from './user.js';
 import { Message } from './message.js';
 import { TimelineRepository } from './timeline.repository.js';
+import { randomUserFactory } from './testing/random-user.factory.js';
+import { randomMessageFactory } from './testing/random-message.factory.js';
 
 class PublishMessageToPersonalTimelineInteractor {
     constructor(private readonly timelineRepository: TimelineRepository) { }
@@ -14,8 +16,8 @@ class PublishMessageToPersonalTimelineInteractor {
 describe(PublishMessageToPersonalTimelineInteractor.name, () => {
     describe(PublishMessageToPersonalTimelineInteractor.prototype.execute.name, () => {
         it('should call timelineRepository.store with author and message', async () => {
-            const author: User = 'some-random-author';
-            const message: Message = 'some-random-message'; 
+            const author = randomUserFactory();
+            const message = randomMessageFactory(); 
             const timelineRepository: TimelineRepository = {
                 store: jest.fn<TimelineRepository['store']>()
             };
