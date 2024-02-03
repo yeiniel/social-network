@@ -1,6 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 
-class PublishMessageToPersonalTimelineController {}
+class PublishMessageToPersonalTimelineController {
+    handle() {}
+}
 
 describe(PublishMessageToPersonalTimelineController.name, () => {
     describe(PublishMessageToPersonalTimelineController.prototype.handle.name, () => {
