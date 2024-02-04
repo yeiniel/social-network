@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 
-const PublishMessageToPersonalTimelineInteractor = null;
+class PublishMessageToPersonalTimelineInteractor {}
 
-describe('PublishMessageToPersonalTimelineInteractor', () => {
+describe(PublishMessageToPersonalTimelineInteractor.name, () => {
     it('should be defined', () => {
         expect(PublishMessageToPersonalTimelineInteractor).toBeDefined();
     });
