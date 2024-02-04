@@ -1,5 +1,11 @@
 {
     "name": "@yeiniel/social-network",
     "private": true,
-    "type": "module"
+    "type": "module",
+    "devDependencies": {
+        "@tsconfig/node21": "^21.0.1",
+        "@tsconfig/strictest": "^2.0.2",
+        "@types/node": "^20.11.16",
+        "typescript": "^5.3.3"
+    }
 }
