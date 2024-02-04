@@ -9,7 +9,9 @@ import { randomUserFactory } from './testing/random-user.factory.js';
 import { randomMessageFactory } from './testing/random-message.factory.js';
 
 class PublishMessageToPersonalTimelineController {
-    handle(req: Request, res: Response, next: NextFunction) {
+    constructor(private readonly useCase: PublishMessageToPersonalTimelineUseCase) {}
+
+    async handle(req: Request, res: Response, next: NextFunction) {
         try {
             if (!('user' in req)) {
                 res.statusCode = 401;
@@ -19,6 +21,9 @@ class PublishMessageToPersonalTimelineController {
             if (!req.body) {
                 throw new Error('Message is missing');
             }
+
+            await this.useCase.execute(req.user, req.body);
+            res.end();
         } catch (error) {
             next(error);
         }   
