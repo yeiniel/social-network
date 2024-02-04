@@ -10,6 +10,10 @@ class PublishMessageToPersonalTimelineController {
             res.statusCode = 401;
             return next(new Error('Author is missing'));
         }
+
+        if (!req.body) {
+            return next(new Error('Message is missing'));
+        }
     }
 }
 
