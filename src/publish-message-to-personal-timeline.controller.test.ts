@@ -13,10 +13,6 @@ class PublishMessageToPersonalTimelineController {
 
 describe(PublishMessageToPersonalTimelineController.name, () => {
     describe(PublishMessageToPersonalTimelineController.prototype.handle.name, () => {
-        it('should be defined', () => {
-            expect((new PublishMessageToPersonalTimelineController()).handle).toBeDefined();
-        });
-
         it('should set response status code to 401 if no author provided', async () => {
             const endpoint = '/api/v1/personal-timeline';
             const controller = new PublishMessageToPersonalTimelineController();
