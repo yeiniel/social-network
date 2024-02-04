@@ -6,14 +6,18 @@ import { User } from './user.js';
 
 class PublishMessageToPersonalTimelineController {
     handle(req: Request, res: Response, next: NextFunction) {
-        if (!('user' in req)) {
-            res.statusCode = 401;
-            return next(new Error('Author is missing'));
-        }
-
-        if (!req.body) {
-            return next(new Error('Message is missing'));
-        }
+        try {
+            if (!('user' in req)) {
+                res.statusCode = 401;
+                throw new Error('Author is missing');
+            }
+    
+            if (!req.body) {
+                throw new Error('Message is missing');
+            }
+        } catch (error) {
+            next(error);
+        }   
     }
 }
 
