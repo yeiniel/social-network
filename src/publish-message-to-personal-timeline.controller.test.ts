@@ -1,7 +1,8 @@
-import { beforeEach, describe, expect, it } from '@jest/globals';
+import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import request from 'supertest';
 import express, { Request, Response, NextFunction } from 'express';
 import { text } from 'body-parser';
+import { PublishMessageToPersonalTimelineUseCase } from './publish-message-to-personal-timeline.use-case.js';
 import { User } from './user.js';
 import { Message } from './message.js';
 import { randomUserFactory } from './testing/random-user.factory.js';
@@ -25,10 +26,15 @@ class PublishMessageToPersonalTimelineController {
 }
 
 describe(PublishMessageToPersonalTimelineController.name, () => {
+    let interactor: PublishMessageToPersonalTimelineUseCase;
     let controller: PublishMessageToPersonalTimelineController;
     
     beforeEach(() => {
-        controller = new PublishMessageToPersonalTimelineController();
+        interactor = {
+            execute: jest.fn<PublishMessageToPersonalTimelineUseCase['execute']>()
+                .mockResolvedValue(undefined)
+        }
+        controller = new PublishMessageToPersonalTimelineController(interactor);
     });
 
     describe(PublishMessageToPersonalTimelineController.prototype.handle.name, () => {
@@ -75,6 +81,13 @@ describe(PublishMessageToPersonalTimelineController.name, () => {
 
             expect(res.status).toBe(500);
             expect(res.text).toContain('Message is missing');
+        });
+
+        it('should call interactor.execute with user and message', async () => {
+            const res = await buildRequest({ withUser, withMessage });
+
+            expect(res.status).toBe(200);
+            expect(interactor.execute).toHaveBeenCalledWith(withUser, withMessage);
         });
     });
 });
