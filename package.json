@@ -1,5 +1,12 @@
 {
     "name": "@yeiniel/social-network",
     "private": true,
-    "type": "module"
+    "type": "module",
+    "scripts": {
+        "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest"
+    },
+    "devDependencies": {
+        "@jest/globals": "^29.7.0",
+        "jest": "^29.7.0"
+    }
 }
