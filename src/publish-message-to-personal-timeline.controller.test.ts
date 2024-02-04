@@ -1,9 +1,14 @@
 import { describe, expect, it } from '@jest/globals';
 import request from 'supertest';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 
 class PublishMessageToPersonalTimelineController {
-    handle() {}
+    handle(req: Request, res: Response, next: NextFunction) {
+        if (!('user' in req)) {
+            res.statusCode = 401;
+            return next(new Error('Author is missing'));
+        }
+    }
 }
 
 describe(PublishMessageToPersonalTimelineController.name, () => {
