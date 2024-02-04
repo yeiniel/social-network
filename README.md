@@ -10,3 +10,9 @@ original source: https://kata-log.rocks/social-network-kata
  - Mentions: Bob can link to Charlie in a message using “@”
  - Links: Alice can link to a clickable web resource in a message
  - Direct Messages: Mallory can send a private message to Alice
+
+## Working on this Project
+
+[NVM](https://github.com/nvm-sh/nvm) is supported to ensure the proper 
+[Node.js](https://nodejs.org) version is used while working on this project.
+Use command `npm ci` to install dependencies.
