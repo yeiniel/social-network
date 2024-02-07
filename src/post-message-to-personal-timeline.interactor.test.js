@@ -1,10 +1,11 @@
-import { beforeEach, describe, expect, it } from "@jest/globals";
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { postMessageToPersonalTimelineInteractor } from "./post-message-to-personal-timeline.interactor";
 import { NoRepositoryProvidedError } from "./no-repository-provided.error";
 import { NoOwnerProvidedError } from "./no-owner-provided.error";
 import { NoMessageProvidedError } from "./no-message-provided.error";
 
 describe(postMessageToPersonalTimelineInteractor.name, () => {
+    let result;
     let repository;
     let owner;
     let message;
@@ -15,7 +16,10 @@ describe(postMessageToPersonalTimelineInteractor.name, () => {
     }
 
     beforeEach(() => {
-        repository = {};
+        result = Math.random();
+        repository = {
+            store: jest.fn().mockResolvedValue(result)
+        };
         owner = `some-user-${Math.round(Math.random() * 1000)}`;
         message = `some-message-${Math.round(Math.random() * 1000)}`;
     });
@@ -36,5 +40,11 @@ describe(postMessageToPersonalTimelineInteractor.name, () => {
         message = undefined;
 
         expectInteractorToThrow(NoMessageProvidedError);
+    });
+
+    it('should post message to personal timeline', async () => {
+        expect(postMessageToPersonalTimelineInteractor(repository, owner, message))
+            .resolves.toBe(result);
+        expect(repository.store).toHaveBeenCalledWith(owner, message);
     });
 });
