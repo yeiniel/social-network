@@ -2,12 +2,21 @@ import { NoMessageProvidedError } from "./no-message-provided.error";
 import { NoOwnerProvidedError } from "./no-owner-provided.error";
 import { NoRepositoryProvidedError } from "./no-repository-provided.error";
 
-export async function postMessageToPersonalTimelineInteractor(repository, owner, message) {
-    if (!repository) throw new NoRepositoryProvidedError();
+export class PostMessageToPersonalTimelineInteractor {
 
-    if (!owner) throw new NoOwnerProvidedError();
+    #repository;
 
-    if (!message) throw new NoMessageProvidedError();
+    constructor(repository) {
+        if (!repository) throw new NoRepositoryProvidedError();
 
-    return await repository.store(owner, message);
+        this.#repository = repository;
+    }
+
+    async execute(owner, message) {
+        if (!owner) throw new NoOwnerProvidedError();
+
+        if (!message) throw new NoMessageProvidedError();
+
+        return await this.#repository.store(owner, message);
+    }
 }

@@ -1,17 +1,17 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
-import { postMessageToPersonalTimelineInteractor } from "./post-message-to-personal-timeline.interactor";
+import { PostMessageToPersonalTimelineInteractor } from "./post-message-to-personal-timeline.interactor";
 import { NoRepositoryProvidedError } from "./no-repository-provided.error";
 import { NoOwnerProvidedError } from "./no-owner-provided.error";
 import { NoMessageProvidedError } from "./no-message-provided.error";
 
-describe(postMessageToPersonalTimelineInteractor.name, () => {
+describe(PostMessageToPersonalTimelineInteractor.name, () => {
     let result;
     let repository;
     let owner;
     let message;
 
     function expectInteractorToThrow(error) {
-        expect(() => postMessageToPersonalTimelineInteractor(repository, owner, message))
+        expect(async () => new PostMessageToPersonalTimelineInteractor(repository).execute(owner, message))
             .rejects.toThrow(error);
     }
 
@@ -43,7 +43,7 @@ describe(postMessageToPersonalTimelineInteractor.name, () => {
     });
 
     it('should post message to personal timeline', async () => {
-        expect(postMessageToPersonalTimelineInteractor(repository, owner, message))
+        expect(new PostMessageToPersonalTimelineInteractor(repository).execute(owner, message))
             .resolves.toBe(result);
         expect(repository.store).toHaveBeenCalledWith(owner, message);
     });
